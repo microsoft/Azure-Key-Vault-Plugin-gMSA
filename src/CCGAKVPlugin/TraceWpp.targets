@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="TraceWpp" TaskFactory="XamlTaskFactory" AssemblyName="Microsoft.Build.Tasks.v4.0">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml" />
+    <ProjectTools Include="TraceWpp"/>
+  </ItemGroup>
+  <PropertyGroup>
+    <ExtensionsToDeleteOnClean>$(ExtensionsToDeleteOnClean);*.tmh</ExtensionsToDeleteOnClean>
+    <WppConfigPath Condition="'$(WppConfigPath)'==''">$(WindowsSdkDir)bin\WppConfig\Rev1</WppConfigPath>
+  </PropertyGroup>
+  <Target Name="CheckTraceWppLinkPrerequisites" BeforeTargets="Link" DependsOnTargets="ComputeLinkSwitches">
+    <Warning Condition="'$(WppDisplayWarnings)'=='true' and '%(Link.GenerateDebugInformation)'=='No'" Text="The linker will not generate debugging information. Use the linker switch /DEBUG to generate a PDB file." />
+    <Warning Condition="'$(WppDisplayWarnings)'=='true' and '%(Link.GenerateDebugInformation)'=='DebugFastLink'" Text="The linker switch /DEBUG:FASTLINK is incompatible with WPP. Use /DEBUG:FULL instead." />
+  </Target>
+  <Target Name="ComputeTraceWppInputs">
+    <ItemGroup>
+      <ClCompileBackup Include="@(ClCompile)" />
+      <ClCompile Include="$(WppSourceFiles)">
+        <WppEnabled>true</WppEnabled>
+        <ExcludedFromBuild>false</ExcludedFromBuild>
+      </ClCompile>
+      <WppTemp Include="@(ClCompile)" Condition="'%(ClCompile.WppEnabled)'=='true' and '%(ClCompile.ExcludedFromBuild)'!='true'" />
+      <WppTemp Condition="'@(WppTemp)'!='' and !$([System.String]::new('%(WppTemp.WppPreserveExtensions)').Contains(%(Extension)))">
+        <TmhFile>%(Filename).tmh</TmhFile>
+      </WppTemp>
+      <WppTemp Condition="'@(WppTemp)'!='' and $([System.String]::new('%(WppTemp.WppPreserveExtensions)').Contains(%(Extension)))">
+        <TmhFile>%(Filename)%(Extension).tmh</TmhFile>
+      </WppTemp>
+      <TraceWpp Include="@(WppTemp->Distinct())" />
+      <ClCompile Remove="@(ClCompile)" />
+      <ClCompile Include="@(ClCompileBackup)" />
+    </ItemGroup>
+  </Target>
+  <Target Name="TraceWpp" Inputs="@(TraceWpp)" Outputs="@(TraceWpp->'%(WppOutputDirectory)%(TmhFile)')" BeforeTargets="$(WppBeforeTargets)" DependsOnTargets="ComputeTraceWppInputs">
+    <Warning Condition="'$(WppDisplayWarnings)'=='true' and '@(TraceWpp)'!='' and !Exists(%(TraceWpp.WppConfigurationDirectories)) and '%(TraceWpp.WppConfigurationDirectories)'=='$(WppConfigPath)'" Text="The WPP configuration files at '%(TraceWpp.WppConfigurationDirectories)' do not exist. Install the Windows Driver Kit." />
+    <Warning Condition="'$(WppDisplayWarnings)'=='true' and '@(TraceWpp)'!='' and '%(TraceWpp.DebugInformationFormat)'=='None'" Text="The compiler will not generate debugging information. Use the C/C++ compiler switch /Zi to generate debugging information." />
+    <Warning Condition="'$(WppDisplayWarnings)'=='true' and '@(TraceWpp)'!='' and '%(TraceWpp.DebugInformationFormat)'=='EditAndContinue'" Text="The C/C++ compiler switch /ZI is incompatible with WPP. Use /Zi instead." />
+    <TraceWpp
+      Condition="'@(TraceWpp)'!=''"
+      EchoOff="true"
+      StandardOutputImportance="High"
+      CommandLineTemplate="tracewpp.exe [AllOptions] [AdditionalOptions] [WppSourceFiles]"
+      WppModuleName="%(TraceWpp.WppModuleName)"
+      WppAddControlGUID="%(TraceWpp.WppAddControlGUID)"
+      WppDllMacro="%(TraceWpp.WppDllMacro)"
+      WppKernelMode="%(TraceWpp.WppKernelMode)"
+      WppOutputDirectory="%(TraceWpp.WppOutputDirectory)"
+      WppFileExtensions="%(TraceWpp.WppFileExtensions)"
+      WppPreserveExtensions="%(TraceWpp.WppPreserveExtensions)"
+      WppConfigurationDirectories="%(TraceWpp.WppConfigurationDirectories)"
+      WppAlternateConfigurationFile="%(TraceWpp.WppAlternateConfigurationFile)"
+      WppAdditionalConfigurationFile="%(TraceWpp.WppAdditionalConfigurationFile)"
+      WppPreprocessorDefinitions="%(TraceWpp.WppPreprocessorDefinitions)"
+      WppGenerateUsingTemplateFile="%(TraceWpp.WppGenerateUsingTemplateFile)"
+      WppTraceFunction="%(TraceWpp.WppTraceFunction)"
+      WppPublicFunctions="%(TraceWpp.WppPublicFunctions)"
+      WppSearchString="%(TraceWpp.WppSearchString)"
+      WppScanConfigurationData="%(TraceWpp.WppScanConfigurationData)"
+      WppIgnoreExclamationmarks="%(TraceWpp.WppIgnoreExclamationmarks)"
+      WppNumericBaseForFormatStrings="%(TraceWpp.WppNumericBaseForFormatStrings)"
+      WppVerbosityLevel="%(TraceWpp.WppVerbosityLevel)"
+      AdditionalOptions="%(TraceWpp.WppAdditionalOptions)"
+      WppSourceFiles="@(TraceWpp)"
+      />
+  </Target>
+</Project>

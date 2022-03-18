@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectSchemaDefinitions xmlns="clr-namespace:Microsoft.Build.Framework.XamlTypes;assembly=Microsoft.Build.Framework" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <Rule Name="TraceWpp" PageTemplate="tool" DisplayName="WPP Tracing" SwitchPrefix="-" Order="200">
+    <Rule.Categories>
+      <Category Name="General" DisplayName="General" />
+      <Category Name="Function and Macro Options" DisplayName="Function and Macro Options" />
+      <Category Name="Search and Formatting" DisplayName="Search and Formatting" />
+      <Category Name="File Options" DisplayName="File Options" />
+      <Category Name="Advanced" DisplayName="Advanced" />
+      <Category Name="All Options" DisplayName="All Options" Subtype="Search" />
+      <Category Name="Command Line" DisplayName="Command Line" Subtype="CommandLine" />
+    </Rule.Categories>
+    <Rule.DataSource>
+      <DataSource Persistence="ProjectFile" ItemType="ClCompile" Label="" HasConfigurationCondition="true" />
+    </Rule.DataSource>
+    <BoolProperty Name="WppEnabled" DisplayName="Enable WPP Preprocessing" Category="General" IncludeInCommandLine="false" F1Keyword="driver.wpp.general.properties" Description="Enable WPP preprocessing on C/C++ source files." />
+    <BoolProperty Name="WppDisplayWarnings" DisplayName="Display WPP Configuration Warnings" Category="General" IncludeInCommandLine="false" F1Keyword="driver.wpp.general.properties" Description="Display warnings for incompatible project configuration.">
+      <BoolProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" HasConfigurationCondition="true" />
+      </BoolProperty.DataSource>
+    </BoolProperty>
+    <StringListProperty Name="WppSourceFiles" DisplayName="Additional Source Files" Category="General" IncludeInCommandLine="false" F1Keyword="driver.wpp.general.properties" Description="Additional source files to be processed by WPP.">
+      <StringListProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" HasConfigurationCondition="true" />
+      </StringListProperty.DataSource>
+    </StringListProperty>
+    <StringProperty Name="WppAddControlGUID" DisplayName="Control GUID" Category="Function and Macro Options" Switch="ctl:" F1Keyword="driver.wpp.functionmacro.properties" Description="Defines a WPP_CONTROL_GUIDS macro with the specified control GUID and WPP_DEFINE_BIT entries named 'Error', 'Unusual', and 'Noise'. (-ctl:guid)" />
+    <BoolProperty Name="WppDllMacro" DisplayName="Define DLL Macro" Category="Function and Macro Options" Switch="dll" F1Keyword="driver.wpp.functionmacro.properties" Description="Defines the WPP_DLL macro. When this macro is defined, the WPP data structures are initialized whenever WPP_INIT_TRACING is called. Otherwise the structures are initialized only once. (-dll)" />
+    <BoolProperty Name="WppKernelMode" DisplayName="Define Kernel Mode Macro" Category="Function and Macro Options" Switch="km" F1Keyword="driver.wpp.functionmacro.properties" Description="Defines the WPP_KERNEL_MODE macro, which traces kernel-mode components. By default, only user-mode components are traced. By default, only user-mode components are traced. (-km)" />
+    <StringListProperty Name="WppPreprocessorDefinitions" DisplayName="Macro Definitions" Category="Function and Macro Options" Switch="D" F1Keyword="driver.wpp.functionmacro.properties" Description="Adds preprocessor defines to the beginning of the generated file. (-D:name|-D:name=value)" />
+    <StringProperty Name="WppModuleName" DisplayName="Module Name" Category="Search and Formatting" Switch="p:" F1Keyword="driver.wpp.searchformat.properties" Description="Defines the name that will be displayed when decoding events, the default value displayed is the directory name. Used to connect events that are part of a logical module but in separate directories. (-p:string)" />
+    <BoolProperty Name="WppIgnoreExclamationmarks" DisplayName="Ignore Exclamation Marks" Category="Search and Formatting" Switch="noshrieks" F1Keyword="driver.wpp.searchformat.properties" Description="Directs WPP to ignore exclamation marks, also known as 'shrieks' used in complex formatting, such as %!timestamp!. (-noshrieks)" />
+    <IntProperty Name="WppNumericBaseForFormatStrings" DisplayName="Numeric Base of Format Strings" Category="Search and Formatting" Switch="argbase:" F1Keyword="driver.wpp.searchformat.properties" Description="Establishes a numeric base for numbering of format strings. (-argbase:number)" />
+    <StringListProperty Name="WppTraceFunction" DisplayName="Trace Function" Category="Search and Formatting" Switch="func:" F1Keyword="driver.wpp.searchformat.properties" Description="Specifies alternatives to the DoTraceMessage function. (-func:functiondescription)" />
+    <StringListProperty Name="WppPublicFunctions" DisplayName="Public Trace Functions" Category="Search and Formatting" Switch="public:" F1Keyword="driver.wpp.general.properties" Description="Specifies trace functions which annotations are not stripped from public PDBs. (-public:function)" />
+    <StringProperty Name="WppSearchString" DisplayName="Initialization Search String" Category="Search and Formatting" Switch="lookfor:" F1Keyword="driver.wpp.searchformat.properties" Description="Directs WPP to search the source files for the specified string to initiate tracing. (-lookfor:string)" />
+    <StringProperty Name="WppFileExtensions" DisplayName="File Extensions" Category="File Options" Switch="ext:" F1Keyword="driver.wpp.functionmacro.properties" Description="Specifies the file types that WPP recognizes as source files. (-ext:.ext1[.ext2])" />
+    <StringProperty Name="WppPreserveExtensions" DisplayName="Preserve File Extensions" Category="File Options" Switch="preserveext:" F1Keyword="driver.wpp.functionmacro.properties" Description="Preserves the specified file name extensions when creating TMH files. (-preserveext:.ext1[.ext2])" />
+    <StringProperty Name="WppOutputDirectory" DisplayName="Output Directory" Category="File Options" Switch="odir:" Subtype="folder" F1Keyword="driver.wpp.functionmacro.properties" Description="Specifies the directory for the output files that WPP creates. (-odir:path)" />
+    <StringListProperty Name="WppConfigurationDirectories" DisplayName="Configuration Directories" Category="File Options" Switch="cfgdir:" CommandLineValueSeparator=";" F1Keyword="driver.wpp.functionmacro.properties" Description="Specifies the location of configuration and template files. (-cfgdir:path1[;path2])" />
+    <StringProperty Name="WppAlternateConfigurationFile" DisplayName="Alternate Configuration File" Category="File Options" Switch="defwpp:" Subtype="file" F1Keyword="driver.wpp.functionmacro.properties" Description="Specifies an alternate configuration file. WPP uses this file instead of the defaultwpp.ini file. (-defwpp:path)" />
+    <StringProperty Name="WppAdditionalConfigurationFile" DisplayName="Additional Configuration File" Category="File Options" Switch="ini:" Subtype="file" F1Keyword="driver.wpp.functionmacro.properties" Description="Specifies an additional configuration file. WPP uses the specified file in addition to the default file, defaultwpp.ini. (-ini:path)" />
+    <StringProperty Name="WppGenerateUsingTemplateFile" DisplayName="Template File" Category="File Options" Switch="gen:" F1Keyword="driver.wpp.functionmacro.properties" Description="For every source file that WPP processes with the name specified between braces {}, create another file with the specified file name extension. (-gen{file.tpl}*.ext)" />
+    <StringProperty Name="WppScanConfigurationData" DisplayName="Scan Configuration Data" Category="File Options" Switch="scan:" Subtype="file" F1Keyword="driver.wpp.functionmacro.properties" Description="Searches for configuration data, such as custom data types, in a file that is not a configuration file, as well as in defaultwpp.ini. (-scan:file)" />
+    <EnumProperty Name="WppVerbosityLevel" DisplayName="Verbosity Level" Category="Advanced" F1Keyword="driver.wpp.general.properties" Description="Selects the verbosity level. (-vn)">
+      <EnumValue Name="None" DisplayName="None" />
+      <EnumValue Name="1" Switch="v1" DisplayName="Level1" />
+      <EnumValue Name="2" Switch="v2" DisplayName="Level2" />
+      <EnumValue Name="3" Switch="v3" DisplayName="Level3" />
+      <EnumValue Name="4" Switch="v4" DisplayName="Level4" />
+    </EnumProperty>
+    <DynamicEnumProperty Name="WppBeforeTargets" DisplayName="Execute Before" Category="Advanced" EnumProvider="Targets" IncludeInCommandLine="False" F1Keyword="driver.wpp.general.properties" Description="Specifies the targets for the build customization to run before.">
+      <DynamicEnumProperty.ProviderSettings>
+        <NameValuePair Name="Exclude" Value="^WppBeforeTargets|^Compute" />
+      </DynamicEnumProperty.ProviderSettings>
+      <DynamicEnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" HasConfigurationCondition="true" />
+      </DynamicEnumProperty.DataSource>
+    </DynamicEnumProperty>
+    <StringProperty Name="AdditionalOptions" DisplayName="Additional Options" Category="Command Line" Subtype="AdditionalOptions" F1Keyword="driver.wpp.general.properties" Description="Additional Options">
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" PersistedName="WppAdditionalOptions" ItemType="ClCompile" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+    </StringProperty>
+  </Rule>
+</ProjectSchemaDefinitions>

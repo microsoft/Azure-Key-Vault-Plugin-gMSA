@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(ConfigurationType)'!='Makefile'">
+    <WppBeforeTargets Condition="'$(WppBeforeTargets)'==''">ClCompile</WppBeforeTargets>
+    <WppDisplayWarnings Condition="'$(WppDisplayWarnings)'==''">true</WppDisplayWarnings>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WppEnabled Condition="'%(ClCompile.WppEnabled)'==''">true</WppEnabled>
+      <WppKernelMode Condition="'%(ClCompile.WppKernelMode)'==''">false</WppKernelMode>
+      <WppOutputDirectory Condition="'%(ClCompile.WppOutputDirectory)'==''">$(IntDir)</WppOutputDirectory>
+      <WppConfigurationDirectories Condition="'%(ClCompile.WppConfigurationDirectories)'==''">$(WppConfigPath)</WppConfigurationDirectories>
+      <WppIgnoreExclamationmarks Condition="'%(ClCompile.WppIgnoreExclamationmarks)'==''">false</WppIgnoreExclamationmarks>
+      <WppVerbosityLevel Condition="'%(ClCompile.WppVerbosityLevel)'==''">None</WppVerbosityLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

@@ -1,0 +1,30 @@
+import "oaidl.idl";
+import "wtypes.idl";
+
+[
+    object,
+    uuid(6ecda518-2010-4437-8bc3-46e752b7b172),
+    pointer_default(unique)
+]
+interface ICcgDomainAuthCredentials : IUnknown
+{
+    HRESULT  GetPasswordCredentials([in] LPCWSTR PluginInput, [out] LPWSTR* domainName, [out] LPWSTR* username, [out] LPWSTR* password);
+}
+
+// Proxy dll is shared with onecore and UUID can be found under \onecore\merged\commonproxystub\dll\sources
+
+[
+    uuid(a0eadf2f-ecad-4fb6-bb7a-943c61544afe),
+    version(1.0)
+]
+library CCGPluginLib
+{
+    importlib("stdole2.tlb");
+    [
+        uuid(ccc2a336-d7f3-4818-a213-272b7924213e)
+    ]
+    coclass CCGPlugin
+    {
+        [default] interface ICcgDomainAuthCredentials;
+    };
+};

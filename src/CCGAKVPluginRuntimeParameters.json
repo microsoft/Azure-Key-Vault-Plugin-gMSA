@@ -1,0 +1,8 @@
+{
+    "ObjectID": "valid object id of managed idenity assigned to both keyvault and VM",
+    "ValidSecretUri": "URI of secret stored in keyvault with valid credentials in domain\\user:pass format",
+    "ObjectIDWithoutPermissions": "valid object id of a managed identity that DOES NOT have access to the keyvault and VM",
+    "IllFormedValueSecretUri": "URI of secret stored in keyvault with invalid format. ex. username=johnsmith&password=secure",
+    "InvalidDomainValueSecretUri": "URI of secret stored in keyvault with invalid domain. ex. red:mond\\johnsmith:NotAReaPassword*",
+    "NoDomainValueSecretUri": "URI of secret stored in keyvault with no domain. ex. johnsmith:NotAReaPassword*"
+  }  
